@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include "tabelaSimbolo_VO.h"
+
 
 char* leitura (FILE* entrada, int* parada) {
 	
@@ -10,12 +12,12 @@ char* leitura (FILE* entrada, int* parada) {
 
 	n = 1024;
 	p = malloc (n);
-	l_conta = i = 0;
+	l_conta = i = l = 0;
 
-	l = fgetc(entrada);
+	while (l != EOF && l_conta == 0) {
 
-	while (l != EOF && (isspace (l) || l_conta == 0 )) {
-		
+		l = fgetc(entrada);
+
 		while (!isspace (l) && l != EOF) {
 			
 			if (l >= 65 && l <= 90) 
@@ -27,7 +29,7 @@ char* leitura (FILE* entrada, int* parada) {
 			}
 
 			else if (l_conta == 0 && (l >= 97 && l <= 122)) {
-				printf("%d\n", l_conta);
+				
 				p[i] = ((char)l);
 				l_conta++;
 				i++;
@@ -48,7 +50,10 @@ char* leitura (FILE* entrada, int* parada) {
 int main (int argc, char **argv) {
 
 	char *tipo, *modo, *palavra;
-	int *parada, para;
+	int *parada, *n, *tab_n;
+	int para, padrao, tamanho;
+	
+	simb *tabela;
 	FILE *entrada;
 
 	entrada = fopen (argv[1], "r");
@@ -56,12 +61,27 @@ int main (int argc, char **argv) {
 	modo = argv[3];
 
 	para = 1;
+	padrao = 1024;
+	tamanho = 1024;
+	
 	parada = &para;
+	n = &padrao;
+	tab_n = &tamanho;
+
+	tabela = criaTabela (n);
+	imprimeTabela (tabela, tab_n);
 	
 	while (*parada) {
 		palavra = leitura (entrada, parada);
-		printf("%s\n", palavra);
+
+		if (strcmp(tipo, "VO") == 0) {
+			printf("entrou\n");
+			insereElemento (tabela, palavra, n, tab_n);
+			printf("saiu\n");
+		}
 	}
+
+	imprimeTabela (tabela, tab_n);
 
 	return 0;
 }
