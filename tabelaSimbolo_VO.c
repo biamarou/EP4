@@ -24,8 +24,11 @@ void realocaTabela (simb *tab, int *tab_n, int *n) {
 }
 
 void deslocaElementos (simb *tab, char *elem, int pos, int *tab_n) {
-    int i;
-    for (i = *tab_n; i > pos; i--) {
+    int i, fim;
+    for (fim = 0; tab[fim].chave != NULL; fim++) {}
+    
+    for (i = fim - 1; i >= pos; i--) {
+            
         tab[i + 1].chave = tab[i].chave;
         tab[i + 1].freq = tab[i].freq;
     }
@@ -39,13 +42,21 @@ int encontraPos (simb *tab, char *elem, int *tab_n) {
     int i;
     i = 0;
 
-    while (i < *tab_n) {
-        if (strcmp (tab[i].chave, elem) == 0)
-            return i;
-        else if (strcmp (tab[i].chave, elem) > 0)
-            return (i - 1);
+    while (tab[i].chave != NULL && strcmp (elem, tab[i].chave) > 0) {
         i++;
     }
+    
+    return i;
+}
+
+int verificaFim (simb *tab, int *n) {
+    int i;
+    
+    for (i = 0; i < *n; i++) {
+        if (tab[i].chave == NULL)
+            return 0;
+    }
+    
     return i;
 }
 
@@ -53,23 +64,26 @@ void insereElemento (simb *tab, char *elem, int *n, int *tab_n) {
     int pos;
     pos = encontraPos(tab, elem, tab_n);
     printf("%d achou pos\n", pos);
-    if (tab[pos].freq == 0) {
-        printf("oie\n");
+    if (tab[pos].chave == NULL) {
+
         tab[pos].chave = elem;
         tab[pos].freq += 1;
-        *tab_n += 1;   
+        printf("inseriu\n");
+        imprimeTabela (tab, tab_n);
+        printf("\n");  
     }
 
     else if (strcmp(tab[pos].chave, elem) == 0)
         tab[pos].freq += 1;
 
     else {
-        if (*tab_n == *n)
+        if (verificaFim (tab, n))
             realocaTabela(tab, tab_n, n);
-        printf("entra desloca\n");
+        
         deslocaElementos (tab, elem, pos, tab_n);
         printf("deslocou\n");
-        *tab_n += 1; 
+        imprimeTabela (tab, tab_n);
+        printf("\n");
     }
 }
 
@@ -92,8 +106,8 @@ simb* criaTabela (int *n) {
 void imprimeTabela (simb *tab, int *tab_n) {
 
     int i;
-    for (i = 0; i < *tab_n; i++) {
-        printf("%s ", tab[i].chave);
-        printf("%d\n", tab[i].freq);
+    for (i = 0; tab[i].chave != NULL; i++) {
+        printf("chave: %s ", tab[i].chave);
+        printf("freq: %d\n", tab[i].freq);
     }
 }
