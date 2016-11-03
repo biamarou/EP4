@@ -73,11 +73,11 @@ int main (int argc, char **argv) {
 	
 	while (*parada) {
 		palavra = leitura (entrada, parada);
-
+		printf("%s\n",palavra );
 		if (strcmp(tipo, "VO") == 0) {
-			printf("entrou\n");
+			
 			insereElemento (tabela, palavra, n, tab_n);
-			printf("saiu\n");
+			
 		}
 	}
 
