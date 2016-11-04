@@ -2,26 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include "tabelaSimbolo_VO.h"
-
-void liberaTabela (simb *tab, int *tab_n) {
-
-}
-
-void realocaTabela (simb *tab, int *tab_n, int *n) {
-    simb *nova;
-    int i;
-
-    nova = malloc (2*(*n)*sizeof(simb));
-    for (i = 0; i < *tab_n; i++) {
-        nova[i].chave = tab[i].chave;
-        nova[i].freq = tab[i].freq;
-    }
-
-    liberaTabela (tab, n);
-    *n *= 2;
-    tab = nova;
-}
+#include "tabelaSimbolo_V.h"
 
 void deslocaElementos (simb *tab, char *elem, int pos, int *tab_n) {
     int i, fim;
@@ -44,17 +25,6 @@ int encontraPos (simb *tab, char *elem, int *tab_n) {
 
     while (tab[i].chave != NULL && strcmp (elem, tab[i].chave) > 0) {
         i++;
-    }
-    
-    return i;
-}
-
-int verificaFim (simb *tab, int *n) {
-    int i;
-    
-    for (i = 0; i < *n; i++) {
-        if (tab[i].chave == NULL)
-            return 0;
     }
     
     return i;
@@ -84,30 +54,5 @@ void insereElemento (simb *tab, char *elem, int *n, int *tab_n) {
         printf("deslocou\n");
         imprimeTabela (tab, tab_n);
         printf("\n");
-    }
-}
-
-simb* criaTabela (int *n) {
-    int i;
-    simb *tab;
-    tab = malloc ((*n)*sizeof(simb));
-    
-    for (i = 0; i < *n; i++) {
-        tab[i].chave = malloc (1024);
-        tab[i].chave = NULL;
-        tab[i].freq = 0;
-    }
-
-    return (tab);
-}
-
-
-
-void imprimeTabela (simb *tab, int *tab_n) {
-
-    int i;
-    for (i = 0; tab[i].chave != NULL; i++) {
-        printf("chave: %s ", tab[i].chave);
-        printf("freq: %d\n", tab[i].freq);
     }
 }
