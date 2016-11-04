@@ -3,6 +3,9 @@
 #include <ctype.h>
 #include <string.h>
 #include "tabelaSimbolo_VO.h"
+#include "ordena.h"
+#include "tabelaSimbolo_V.h"
+
 
 
 char* leitura (FILE* entrada, int* parada) {
@@ -51,7 +54,7 @@ int main (int argc, char **argv) {
 
 	char *tipo, *modo, *palavra;
 	int *parada, *n, *tab_n;
-	int para, padrao, tamanho;
+	int para, padrao;
 	
 	simb *tabela;
 	FILE *entrada;
@@ -60,27 +63,27 @@ int main (int argc, char **argv) {
 	tipo = argv[2];
 	modo = argv[3];
 
-	para = 1;
-	padrao = 1024;
-	tamanho = 1024;
-	
-	parada = &para;
-	n = &padrao;
-	tab_n = &tamanho;
 
-	tabela = criaTabela (n);
-	imprimeTabela (tabela, tab_n);
+	para = 1;
+	parada = &para;
+
+	tabela = criaTabela (&n, &tab_n);
+	printf("aham\n");
+	printf("tamanho %d\n", *tab_n);
 	
 	while (*parada) {
+		
 		palavra = leitura (entrada, parada);
-		printf("%s\n",palavra );
-		if (strcmp(tipo, "VO") == 0) {
-			
-			insereElemento (tabela, palavra, n, tab_n);
-			
+		printf("%s\n", palavra);
+		if (strcmp(tipo, "VD") == 0) {
+			printf("entrou\n");
+			insereDesordenado(tabela, palavra, n, tab_n);
+			printf("saiu\n");
 		}
 	}
-
+	printf("saiu2\n");
+	printf("tamanho %d\n", *tab_n);
+	ordenaAlfabetico (tabela, 0, *tab_n);
 	imprimeTabela (tabela, tab_n);
 
 	return 0;
